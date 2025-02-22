@@ -1,7 +1,10 @@
 package me.medev.itsupportticket.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -10,26 +13,24 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "COMMENTS")
-@ToString
-public class Comment {
-
+@Table(name = "AUDITLOG")
+public class AuditLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentId;
+    private Long logId;
 
     @ManyToOne
     @JoinColumn(name = "ticket_id", nullable = false)
-    @ToString.Exclude
     private Ticket ticket;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @ToString.Exclude
     private User user;
 
-    @Lob
-    private String comment;
+    private String action;
+
+    private String oldValue;
+    private String newValue;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
