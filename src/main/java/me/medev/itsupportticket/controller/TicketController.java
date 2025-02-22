@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import me.medev.itsupportticket.dto.CommentRequest;
 import me.medev.itsupportticket.dto.TicketRequest;
 import me.medev.itsupportticket.dto.TicketResponse;
@@ -18,20 +19,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tickets")
+@RequiredArgsConstructor
 public class TicketController {
-    private final TicketService ticketService;
 
-    public TicketController(TicketService ticketService) {
-        this.ticketService = ticketService;
-    }
+    private final TicketService ticketService;
 
     @Operation(summary = "Create a new ticket")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ticket created successfully",
+            @ApiResponse(responseCode = "200",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = TicketResponse.class)) }),
-            @ApiResponse(responseCode = "400", description = "Invalid input",
-                    content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content) })
     @PostMapping
@@ -45,11 +42,9 @@ public class TicketController {
 
     @Operation(summary = "Get all tickets for a user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Tickets retrieved successfully",
+            @ApiResponse(responseCode = "200",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = TicketResponse.class)) }),
-            @ApiResponse(responseCode = "400", description = "Invalid input",
-                    content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content) })
     @GetMapping
@@ -62,11 +57,9 @@ public class TicketController {
 
     @Operation(summary = "Update the status of a ticket")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ticket status updated successfully",
+            @ApiResponse(responseCode = "200",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = TicketResponse.class)) }),
-            @ApiResponse(responseCode = "400", description = "Invalid input",
-                    content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content) })
     @PutMapping("/{ticketId}/status")
@@ -78,8 +71,6 @@ public class TicketController {
         TicketResponse ticket = ticketService.updateTicketStatus(ticketId, status, username);
         return ResponseEntity.ok(ticket);
     }
-
-    // add comment endpoint
 
     @Operation(summary = "Add a comment to a ticket")
     @ApiResponses(value = {
@@ -96,5 +87,22 @@ public class TicketController {
             @RequestHeader("X-User") String username) {
         TicketResponse ticket = ticketService.addComment(ticketId, comment, username);
         return ResponseEntity.ok(ticket);
+    }
+
+    @Operation(summary = "Get a ticket by id and status")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TicketResponse.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content) })
+    @GetMapping("/search")
+    public ResponseEntity<List<TicketResponse>> searchTickets(
+            @Parameter(description = "Username of the user", required = true, example = "employee1 or itsupport1")
+            @RequestHeader("X-User") String username,
+            @RequestParam(required = false) Long ticketId,
+            @RequestParam(required = false) Status status) {
+        List<TicketResponse> tickets = ticketService.searchTickets(username, ticketId, status);
+        return ResponseEntity.ok(tickets);
     }
 }

@@ -125,6 +125,19 @@ public class TicketService {
         return convertToResponse(ticketRepository.save(ticket));
     }
 
+    public List<TicketResponse> searchTickets(String username, Long ticketId, Status status) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // If user is an employee, only allow them to search their own tickets
+        Long userId = (user.getRole() == UserRole.EMPLOYEE) ? user.getUserId() : null;
+
+        List<Ticket> tickets = ticketRepository.searchTickets(ticketId, status, userId);
+        return tickets.stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
+    }
+
     private TicketResponse convertToResponse(Ticket ticket) {
         TicketResponse response = new TicketResponse();
         response.setTicketId(ticket.getTicketId());
