@@ -3,6 +3,8 @@ package me.medev.itsupportticket.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.medev.itsupportticket.dto.*;
 import me.medev.itsupportticket.entity.Status;
+import me.medev.itsupportticket.entity.Priority;
+import me.medev.itsupportticket.entity.Category;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -25,6 +27,9 @@ public class TicketClientApp extends JFrame {
     private JTextField ticketIdField;
     private JTextArea descriptionArea;
     private JComboBox<Status> statusComboBox;
+    private JTextField titleField;
+    private JComboBox<Priority> priorityComboBox;
+    private JComboBox<Category> categoryComboBox;
 
     public TicketClientApp() {
         setTitle("IT Support Ticket Client");
@@ -48,6 +53,22 @@ public class TicketClientApp extends JFrame {
         userPanel.add(new JLabel("Username:"), "gapright 5");
         userPanel.add(usernameField, "grow");
         add(userPanel, "growx, wrap, gapbottom 10");
+
+        JPanel createPanel = new JPanel(new MigLayout("", "[][grow]", "[]"));
+        createPanel.setBorder(BorderFactory.createTitledBorder("Create Ticket"));
+        createPanel.add(new JLabel("Title:"), "gapright 5");
+        titleField = new JTextField(20);
+        createPanel.add(titleField, "grow, wrap");
+
+        createPanel.add(new JLabel("Priority:"), "gapright 5");
+        priorityComboBox = new JComboBox<>(Priority.values());
+        createPanel.add(priorityComboBox, "grow, wrap");
+
+        createPanel.add(new JLabel("Category:"), "gapright 5");
+        categoryComboBox = new JComboBox<>(Category.values());
+        createPanel.add(categoryComboBox, "grow, wrap");
+
+        add(createPanel, "growx, wrap, gapbottom 10");
 
         JPanel actionPanel = new JPanel(new MigLayout("", "[grow][grow][grow]", "[][]"));
         actionPanel.setBorder(BorderFactory.createTitledBorder("Actions"));
@@ -91,7 +112,10 @@ public class TicketClientApp extends JFrame {
     private void createTicket() {
         try {
             TicketRequest request = new TicketRequest();
+            request.setTitle(titleField.getText());
             request.setDescription(descriptionArea.getText());
+            request.setPriority((Priority) priorityComboBox.getSelectedItem());
+            request.setCategory((Category) categoryComboBox.getSelectedItem());
 
             String json = objectMapper.writeValueAsString(request);
             HttpRequest httpRequest = HttpRequest.newBuilder()

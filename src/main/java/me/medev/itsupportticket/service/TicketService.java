@@ -114,6 +114,7 @@ public class TicketService {
         audit.setTicket(ticket);
         audit.setUser(user);
         audit.setAction("COMMENT");
+        audit.setNewValue(request.getComment());
         audit.setCreatedAt(LocalDateTime.now());
 
         auditRepository.save(audit);
