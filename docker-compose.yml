@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  oracle-db:
+    image: gvenzl/oracle-xe:21.3.0
+    environment:
+      - ORACLE_PASSWORD=iticket25
+      - INIT_PDB_NAME=XEPDB1
+      - ORACLE_CHARACTERSET=AL32UTF8
+      - ORACLE_SCRIPTS=true
+    ports:
+      - "1522:1521"
+      - "5501:5500"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./init.sql:/container-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "sqlplus", "-L", "sys/iticket25@//localhost:1521/XEPDB1 as sysdba", "-v"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  backend:
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-db:1521/XEPDB1
+      - SPRING_DATASOURCE_USERNAME=iticket
+      - SPRING_DATASOURCE_PASSWORD=iticket25
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.OracleDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  oracle-data:
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,9 +1,7 @@
 package me.medev.itsupportticket.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,6 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "USERS")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +34,12 @@ public class User {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    public User(String email, String password, UserRole role, String username,  LocalDateTime createdAt) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.createdAt = createdAt;
+    }
 }

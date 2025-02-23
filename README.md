@@ -51,14 +51,34 @@ A Spring Boot application for managing IT support tickets with role based access
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/medAmineRg/IT-Support-Ticket.git
    cd IT-Support-Ticket
    ```
 
-2. Build the project:
+2. Add remote origin (if setting up from scratch):
+
+   ```bash
+   git remote add origin https://github.com/medAmineRg/IT-Support-Ticket.git
+   ```
+
+3. Build the project:
 
    ```bash
    mvn clean install
+   ```
+
+## Running with Docker
+
+1. Pull the Docker image:
+
+   ```bash
+   docker pull mohamed99amine/it-support-ticket:1.0.0
+   ```
+
+2. Run using docker-compose:
+
+   ```bash
+   docker-compose up -d
    ```
 
 3. Run the application:
@@ -74,7 +94,7 @@ A Spring Boot application for managing IT support tickets with role based access
 
 ## API Documentation
 
-Once the application is running, access the OpenAPI documentation at: [http://localhost:8081/swagger-ui/](http://localhost:8081/swagger-ui/)
+Once the application is running, access the OpenAPI documentation at: [http://localhost:8081/swagger-ui/index.html](http://localhost:8081/swagger-ui/index.html)
 
 ## Testing
 

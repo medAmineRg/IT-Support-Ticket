@@ -82,7 +82,7 @@ public class TicketClientApp extends JFrame {
         actionPanel.add(new JLabel("Status:"), "split 2, gapleft 10, gapright 5");
         actionPanel.add(statusComboBox, "growx, wrap, gapbottom 5");
 
-        actionPanel.add(new JLabel("Description:"), "top, gapright 5");
+        actionPanel.add(new JLabel("Comment:"), "top, gapright 5");
         actionPanel.add(new JScrollPane(descriptionArea), "span 2, grow, wrap");
 
         JButton createButton = new JButton("Create Ticket");
