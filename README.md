@@ -45,13 +45,7 @@ A Spring Boot application for managing IT support tickets with role based access
    cd IT-Support-Ticket
    ```
 
-2. Add remote origin (if setting up from scratch):
-
-   ```bash
-   git remote add origin https://github.com/medAmineRg/IT-Support-Ticket.git
-   ```
-
-3. Build the project:
+2. Build the project:
 
    ```bash
    mvn clean install
@@ -81,6 +75,36 @@ A Spring Boot application for managing IT support tickets with role based access
    ```bash
    java -cp target/IT-Support-Ticket-0.0.1-SNAPSHOT.jar me.medev.itsupportticket.client.TicketClientApp
    ```
+
+## Environment Variables
+
+The application uses the following environment variables:
+
+```properties
+ORACLE_USER=C##ITICKET        # Oracle database username
+ORACLE_PASSWORD=iticket25     # Oracle database password
+ORACLE_URL=jdbc:oracle:thin:@localhost:1521:XE  # Database URL
+SERVER_PORT=8081              # Application server port
+```
+
+## Project Structure
+
+```
+.
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── me/medev/itsupportticket/
+│   │   │       ├── client/     # Swing client
+│   │   │       ├── controller/ # REST controllers
+│   │   │       ├── model/      # Domain models
+│   │   │       ├── repository/ # Data access
+│   │   │       └── service/    # Business logic
+│   │   └── resources/          # Configuration files
+│   └── test/                   # Test cases
+├── docs/                       # Documentation
+```
+
 
 ## API Documentation
 
