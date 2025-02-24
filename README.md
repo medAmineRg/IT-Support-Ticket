@@ -19,7 +19,7 @@ A Spring Boot application for managing IT support tickets with role based access
 - Oracle Database 21c Express Edition
 - Oracle SQL\*Plus (for database setup to execute SQL scripts)
 
-## Database Setup
+## Database Setup (Only for local setup, don't need if using Docker)
 
 1. Connect to Oracle as SYSDBA:
 
@@ -34,16 +34,6 @@ A Spring Boot application for managing IT support tickets with role based access
    GRANT CONNECT, RESOURCE, DBA TO C##ITICKET;
    GRANT CREATE SESSION TO C##ITICKET;
    GRANT UNLIMITED TABLESPACE TO C##ITICKET;
-   ```
-
-3. insert two users in the users table:
-
-   ```sql
-   INSERT INTO USERS ("created_at", "userId", "email", "password", "role", "username")
-   VALUES (SYSTIMESTAMP, 1, 'employee1@example.com', 'password', 'EMPLOYEE', 'employee1');
-
-   INSERT INTO USERS ("created_at", "userId", "email", "password", "role", "username")
-   VALUES (SYSTIMESTAMP, 2, 'itsupport1@example.com', 'password', 'ITSUPPORT', 'itsupport1');
    ```
 
 ## Application Setup
